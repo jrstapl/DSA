@@ -250,6 +250,45 @@ void Rotate(array_adt_t *A, int i) {
   }
 }
 
+array_adt_t Union(array_adt_t *A, array_adt_t *B, array_adt_t *C) {
+  // all values might be unique so we potentially need the combined capactiy
+  int total_len = A->length + B->length;
+  if (C->size < total_len) {
+    _Resize(C, total_len);
+  }
+  Clear(C);
+  for (int i = 0; i < A->length; i++) {
+    C->A[i] = A->A[i];
+  }
+  for (int i = 0; i < B->length; i++) {
+    if (Search(C, B->A[i]) == -1) {
+      Append(C, B->A[i]);
+    }
+  }
+}
+array_adt_t Intersection(array_adt_t *A, array_adt_t *B, array_adt_t *C) {
+  // max size is all elements in A are also in B
+  if (C->size < A->length) {
+    _Resize(C, A->length);
+  }
+  for (int i = 0; i < B->length; i++) {
+    if (Search(B, A->A[i]) != -1) {
+      Append(C, A->A[i]);
+    }
+  }
+}
+array_adt_t Difference(array_adt_t *A, array_adt_t *B, array_adt_t *C) {
+  // max size is all elements in A are not in B
+  if (C->size < A->length) {
+    _Resize(C, A->length);
+  }
+  for (int i = 0; i < B->length; i++) {
+    if (Search(B, A->A[i]) == -1) {
+      Append(C, A->A[i]);
+    }
+  }
+}
+
 int main(int argc, char *argv[]) {
   array_adt_t arr = {0};
   arr.size = 10;
